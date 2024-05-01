@@ -273,8 +273,8 @@ begin
 						when x"06" =>	in1_reg(5) <= ps2_scancode(8);     -- P1 start "F2"
 						when x"0c" =>	in1_reg(6) <= ps2_scancode(8);     -- P2 start "F4"
 
---						when x"43" =>	p1_jump  <= ps2_scancode(8);       -- P1 jump "I"
---											p2_jump  <= ps2_scancode(8);       -- P2 jump "I"
+						when x"43" =>	in1_reg(4) <= ps2_scancode(8);     -- P1 jump "I" -- lizwiz IPT_BUTTON1
+--											in1_reg(7) <= ps2_scancode(8);     -- P2 jump "I" --lizwiz IPT_BUTTON1 | IPF_PLAYER2 (makes horizontal scan unstable)
 
 						when x"75" =>	in0_reg(0) <= ps2_scancode(8);     -- P1 up arrow
 											in1_reg(0) <= ps2_scancode(8);     -- P2 up arrow

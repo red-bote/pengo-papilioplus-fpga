@@ -339,8 +339,9 @@ begin
 		rom_data_out <= rom_data_in ;
 
 		-- mux ROMs to same data bus
-		-- ignore A15 so that Pacman ROMs 0000-3FFF mirror in high mem at 8000-BFFF
-		if rom_addr(14) = '0' then
+		-- ignore A15 so that Pacman ROMs 0000-3FFF mirror in high mem at 8000-BFFF (Incorrect! We need A15 to map lizwiz ROM_PGM_1 at $8000)
+--		if rom_addr(14) = '0' then
+		if rom_addr(15 downto 14) = "00" then
 			rom_data_in <= rom_lo;
 		else
 			rom_data_in <= rom_hi;
