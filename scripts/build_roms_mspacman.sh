@@ -1,4 +1,6 @@
 #!/bin/bash
+# Converted to .sh by Glenn Neidermeier 2-May-2024
+#
 #@echo off
 #
 #REM SHA1 sums of files required
@@ -46,7 +48,6 @@
 # set PATHs
 rom_path_src=../roms/mspacman
 rom_path=../build
-rom_path=../proj/xilinx/basys3/pengopac.srcs/sources_1/imports/build/
 romgen_path=../romgen_source
 
 [ ! -d $rom_path ] && mkdir $rom_path

@@ -1,3 +1,6 @@
+#!/bin/sh
+# Converted to .sh by Glenn Neidermeier 2-May-2024
+
 #@echo off
 #
 #REM SHA1 sums of files required
@@ -46,7 +49,6 @@
 
 rom_path_src=../roms/lizwiz
 rom_path=../build
-#rom_path=../proj/xilinx/basys3/pengopac.srcs/sources_1/imports/build/
 romgen_path=../romgen_source
 
 #REM concatenate consecutive ROM regions
