@@ -102,6 +102,13 @@ architecture RTL of papilio_top is
 	signal dummy            : std_logic_vector( 3 downto 0) := (others => '0');
 
 	--
+    signal video_r_x2       : std_logic_vector(2 downto 0);
+    signal video_g_x2       : std_logic_vector(2 downto 0);
+    signal video_b_x2       : std_logic_vector(1 downto 0);
+    signal hsync_x2         : std_logic;
+    signal vsync_x2         : std_logic;
+
+	--
 	signal audio            : std_logic_vector( 7 downto 0);
 	signal audio_pwm        : std_logic;
 
@@ -109,9 +116,6 @@ architecture RTL of papilio_top is
 	signal ps2_scancode		: std_logic_vector( 9 downto 0) := (others => '0'); 
 
 begin
-	vsync_i <= not vsync_o;
-	hsync_i <= not hsync_o;
-
 	--
 	-- clocks
 	--
@@ -154,39 +158,86 @@ begin
 		dipsw2_reg => dipsw2_reg
 	);
 
-	-- Pacman resolution 224x288
-	u_scanconv : entity work.VGA_SCANCONV
-	generic map (
-		hA				=>  16,	-- h front porch
-		hB				=>  92,	-- h sync
-		hC				=>  46,	-- h back porch
-		hres			=> 578,	-- visible video
-		hpad			=>  18,	-- padding either side to reach standard VGA resolution (hres + 2*hpad = hD)
+  ---------------------------------------------------------------------------------
+  -- uncomment to use scan_converter.vhd
+  ---------------------------------------------------------------------------------
+--	sync_i <= not vsync_o;
+--	hsync_i <= not hsync_o;
+--
+--	-- Pacman resolution 224x288
+--	u_scanconv : entity work.VGA_SCANCONV
+--	generic map (
+--		hA				=>  16,	-- h front porch
+--		hB				=>  92,	-- h sync
+--		hC				=>  46,	-- h back porch
+--		hres			=> 578,	-- visible video
+--		hpad			=>  18,	-- padding either side to reach standard VGA resolution (hres + 2*hpad = hD)
+--
+--		vB				=>   2,	-- v sync
+--		vC				=>  32,	-- v back porch
+--		vres			=> 448,	-- visible video
+--		vpad			=>  16,	-- padding either side to reach standard VGA resolution (vres + vpad = vD)
+--
+--		cstart      =>  38,  -- composite sync start
+--		clength     => 288   -- composite sync length
+--	)
+--	port map (
+--		I_VIDEO                => video_out,
+--		I_HSYNC                => hsync_i,
+--		I_VSYNC                => vsync_i,
+--
+--		O_VIDEO(15 downto 12)  => dummy,
+--		O_VIDEO(11 downto  8)  => O_VIDEO_R,
+--		O_VIDEO( 7 downto  4)  => O_VIDEO_G,
+--		O_VIDEO( 3 downto  0)  => O_VIDEO_B,
+--		O_HSYNC                => O_HSYNC,
+--		O_VSYNC                => O_VSYNC,
+--		O_CMPBLK_N             => open,
+--		--
+--		CLK                    => ena_6,
+--		CLK_X4                 => clk
+--	);
 
-		vB				=>   2,	-- v sync
-		vC				=>  32,	-- v back porch
-		vres			=> 448,	-- visible video
-		vpad			=>  16,	-- padding either side to reach standard VGA resolution (vres + vpad = vD)
 
-		cstart      =>  38,  -- composite sync start
-		clength     => 288   -- composite sync length
-	)
-	port map (
-		I_VIDEO                => video_out,
-		I_HSYNC                => hsync_i,
-		I_VSYNC                => vsync_i,
+  ------------------------------------------------------------
+  -- uncomment to use "alternate" pacman-doublescan
+  ------------------------------------------------------------
+  vsync_i <= vsync_o;
+  hsync_i <= hsync_o;
 
-		O_VIDEO(15 downto 12)  => dummy,
-		O_VIDEO(11 downto  8)  => O_VIDEO_R,
-		O_VIDEO( 7 downto  4)  => O_VIDEO_G,
-		O_VIDEO( 3 downto  0)  => O_VIDEO_B,
-		O_HSYNC                => O_HSYNC,
-		O_VSYNC                => O_VSYNC,
-		O_CMPBLK_N             => open,
-		--
-		CLK                    => ena_6,
-		CLK_X4                 => clk
-	);
+  -- if PACMAN_DBLSCAN used, remember to add pacman_dblscan.vhd to the
+  -- sythesis script you are using (pacman.prg for xst / webpack)
+  --
+  u_dblscan : entity work.VGA_SCANDBL
+    port map (
+      I_R          => video_out(11 downto 9),
+      I_G          => video_out(7 downto 5),
+      I_B          => video_out(3 downto 2),
+      I_HSYNC      => hsync_i,
+      I_VSYNC      => vsync_i,
+
+      O_R          => video_r_x2,
+      O_G          => video_g_x2,
+      O_B          => video_b_x2,
+      O_HSYNC      => hsync_x2,
+      O_VSYNC      => vsync_x2,
+      --
+      CLK          => clk,
+      ENA          => ena_6,
+      ENA_X2       => ena_12
+    );
+
+    O_VIDEO_R(0) <= '0';
+    O_VIDEO_G(0) <= '0';
+    O_VIDEO_B(1 downto 0) <= "00";
+
+    O_VIDEO_R(3 downto 1) <= video_r_x2;
+    O_VIDEO_G(3 downto 1) <= video_g_x2;
+    O_VIDEO_B(3 downto 2) <= video_b_x2;
+
+    O_HSYNC   <= hSync_X2;
+    O_VSYNC   <= vSync_X2;
+  ----------------------------------------------------
 
 	--
 	-- Audio DAC
