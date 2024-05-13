@@ -49,7 +49,6 @@
 
 rom_path_src=../roms/mrtnt
 rom_path=../build
-rom_path=../proj/xilinx/basys3/pengopac.srcs/sources_1/imports/build/
 romgen_path=../romgen_source
 
 

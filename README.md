@@ -15,3 +15,30 @@ Simply by changing ROM files and flipping the state of the PACMAN constant in th
 Added memmory mapper and descramble logic for Ms Pacman so this game will also play now in this implementation.
 
 -----------------------------------------------------------------------
+
+
+## Creating a clock source in Vivado Clocking Wizard 5/11/2024 (Glenn Neidermeier)
+
+The Vivado Clocking Wizard is used to generate a reference clock as close as possible to the VGA pixel frequency 25.175 Mhz.
+The Clocking Wizard will allow the MMCM instance to set for an output frequency of 25.17301 Mhz from the Basys3 100 Mhz oscillator.
+
+- Create standalone project in Vivado, add the Basys 3 constraints and board file definition.
+
+- Search for clock wiz in the IP Catalog.
+
+- Under Clocking Options make sure Input Frequency is 100 Mhz.
+
+- In Output Clock Output Frequency, attempting to set output clock 25.175 will get a warning to set the requested clock frquency to the nearest obtained frequency of 25.17301 Mhz
+
+
+Import the files for synthesis:
+```
+project_1.gen/sources_1/ip/clk_wiz_0/clk_wiz_0_clk_wiz.v
+project_1.gen/sources_1/ip/clk_wiz_0/clk_wiz_0.v
+```
+(Copy sources into project)
+
+_COMPONENT Declaration_ and _INSTANTIATION Template_ for the MMCM instance are found in `project_1.gen/sources_1/ip/clk_wiz_0/clk_wiz_0.vho`
+
+The component instantiation template is used in _proj/xilinx/basys3/pengopac.srcs/sources_1/new/pacman_clocks_xilinx_wiz.vhd_ to wire the new clock into the system. 
+
