@@ -55,7 +55,7 @@ entity PACMAN_MACHINE is
 		PACMAN   : std_logic := '1'; -- set to 1 for all other Pacman hardware games
 		-- only set one of these when PACMAN is set
 		MRTNT    : std_logic := '0'; -- set to 1 when using Mr TNT ROMs, 0 otherwise
-		LIZWIZ   : std_logic := '0'; -- set to 1 when using Lizard Wizard ROMs, 0 otherwise
+		--LIZWIZ   : std_logic := '0'; -- set to 1 when using Lizard Wizard ROMs, 0 otherwise
 		MSPACMAN : std_logic := '0'  -- set to 1 when using Ms Pacman ROMs, 0 otherwise
 	);
 	port (
@@ -478,7 +478,7 @@ begin
 		PENGO    => PENGO,
 		PACMAN   => PACMAN,
 		MRTNT    => MRTNT,
-		LIZWIZ   => LIZWIZ,
+		--LIZWIZ   => LIZWIZ,
 		MSPACMAN => MSPACMAN
 	)
 	port map (

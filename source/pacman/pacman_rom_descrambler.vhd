@@ -234,7 +234,7 @@ entity rom_descrambler is
 		PACMAN   : std_logic := '1'; -- set to 1 for all other Pacman hardware games
 		-- only set one of these when PACMAN is set
 		MRTNT    : std_logic := '0'; -- set to 1 when using Mr TNT ROMs, 0 otherwise
-		LIZWIZ   : std_logic := '0'; -- set to 1 when using Lizard Wizard ROMs, 0 otherwise
+		--LIZWIZ   : std_logic := '0'; -- set to 1 when using Lizard Wizard ROMs, 0 otherwise
 		MSPACMAN : std_logic := '0'  -- set to 1 when using Ms Pacman ROMs, 0 otherwise
 	);
 	port (
@@ -328,7 +328,7 @@ begin
 		end if;
 	end process;
 
-	p_decoder_comb : process(clk, rom_addr, addr, rom_data_in, rom_data_out, rom_patched, rom_hi, rom_lo, overlay_on)
+	p_decoder_comb : process(rom_addr, addr, rom_data_in, rom_data_out, rom_patched, rom_hi, rom_lo, overlay_on, sega_dec)
 		variable patch_addr : std_logic_vector(15 downto 0);
 	begin
 		rom_addr    <= addr;
