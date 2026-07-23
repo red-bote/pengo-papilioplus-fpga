@@ -60,25 +60,27 @@
 
 rom_path_src=../roms/mspacmab
 rom_path=../build
-rom_path=../proj/xilinx/basys3/pengopac.srcs/sources_1/imports/build/
+# rom_path=../proj/xilinx/basys3/pengopac.srcs/sources_1/imports/build/
 romgen_path=../romgen_source
 
-#REM concatenate consecutive ROM regions
+[ ! -d $rom_path ] && mkdir $rom_path
+
+# REM concatenate consecutive ROM regions
 cat $rom_path_src/boot5 $rom_path_src/boot6 > $rom_path/wiz.bin
 cat $rom_path_src/5e $rom_path_src/5f       > $rom_path/gfx1.bin
 cat $rom_path_src/boot1 $rom_path_src/boot2 $rom_path_src/boot3 $rom_path_src/boot4 > $rom_path/main.bin
 
-#REM generate RTL code for small PROMS (note: original .bat omitted 3m, does it matter?)
+# REM generate RTL code for small PROMS (note: original .bat omitted 3m, does it matter?)
 $romgen_path/romgen $rom_path_src/82s126.1m     PROM1_DST  8 a r e > $rom_path/prom1_dst.vhd
 $romgen_path/romgen $rom_path_src/82s126.3m     PROM3_DST  7 a     > $rom_path/prom3_dst.vhd
 $romgen_path/romgen $rom_path_src/82s126.4a     PROM4_DST 10 a     > $rom_path/prom4_dst.vhd
 $romgen_path/romgen $rom_path_src/82s123.7f     PROM7_DST  5 a r e > $rom_path/prom7_dst.vhd
 
-#REM generate RAMB structures for larger ROMS (note: original .bat used 13 bits for GFX1 address, does it matter?)
+# REM generate RAMB structures for larger ROMS (note: original .bat used 13 bits for GFX1 address, does it matter?)
 $romgen_path/romgen $rom_path/gfx1.bin          GFX1      14 l r e > $rom_path/gfx1.vhd
 $romgen_path/romgen $rom_path/main.bin          ROM_PGM_0 14 l r e > $rom_path/rom0.vhd
 
-#REM this is ROM area IS used AND required (note: original .bat used 13 address bits, does it matter?)
+# REM this is ROM area IS used AND required (note: original .bat used 13 address bits, does it matter?)
 $romgen_path/romgen $rom_path/wiz.bin           ROM_PGM_1 14 l r e > $rom_path/rom1.vhd
 
 echo done
