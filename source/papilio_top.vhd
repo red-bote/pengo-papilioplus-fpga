@@ -28,7 +28,7 @@ entity papilio_top is
 architecture RTL of papilio_top is
 	--	only set one of these
 	constant PENGO          : std_logic := '1'; -- set to 1 when using Pengo ROMs, 0 otherwise
-	constant PACMAN         : std_logic := '1'; -- set to 1 for all other Pacman hardware games
+	constant PACMAN         : std_logic := '0'; -- set to 1 for all other Pacman hardware games
 
 	-- only set one of these when PACMAN is set
 	constant MRTNT          : std_logic := '0'; -- set to 1 when using Mr TNT ROMs, 0 otherwise
