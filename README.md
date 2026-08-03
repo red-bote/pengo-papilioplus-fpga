@@ -2,6 +2,8 @@
 
 To build this project for Papilio Duo, try rolling back to commit 122c2b9007113, or see [here](https://github.com/neiderm/pengo-papilioplus-fpga).
 
+TODO (8/2026) VGA monitors seem to be fine, but one small LCD panel does not sync.
+
 Readme from https://code.google.com/archive/p/pengo-papilioplus-fpga/:
 
 -----------------------------------------------------------------------
