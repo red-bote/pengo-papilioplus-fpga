@@ -2,7 +2,7 @@
 
 To build this project for Papilio Duo, try rolling back to commit 122c2b9007113, or see [here](https://github.com/neiderm/pengo-papilioplus-fpga).
 
-TODO (8/2026) VGA monitors seem to be fine, but one small LCD panel does not sync.
+Update 9/2026: test monitors are Eyoyo EM08F, Sylvania SF150
 
 Readme from https://code.google.com/archive/p/pengo-papilioplus-fpga/:
 
@@ -45,4 +45,26 @@ project_1.gen/sources_1/ip/clk_wiz_0/clk_wiz_0.v
 _COMPONENT Declaration_ and _INSTANTIATION Template_ for the MMCM instance are found in `project_1.gen/sources_1/ip/clk_wiz_0/clk_wiz_0.vho`
 
 The component instantiation template is used in _proj/xilinx/basys3/pengopac.srcs/sources_1/new/pacman_clocks_xilinx_wiz.vhd_ to wire the new clock into the system. 
+
+## Controls (Basys 3)
+
+Keyboard is decoded in fabric by the papilio PS/2 stack (`source/PS2/`) connected to
+the **onboard USB-HID connector** (PS/2 protocol; pin `PS2CLK1` -> C17, `PS2DAT1` -> B17,
+LVCMOS33 + PULLUP). This port is keyboard-only: `JA`, the buttons and the switches are
+left unconnected in the `rtl_top` wrapper.
+
+Scancode -> input map (`source/papilio_top.vhd`, both the PENGO and PACMAN branches):
+
+| Key        | Action                          |
+|------------|---------------------------------|
+| F1         | P1 coin                         |
+| F3         | P2 coin                         |
+| F2         | 1P start                        |
+| F4         | 2P start                        |
+| Arrow keys | Move (P1 and P2 simultaneously) |
+| I          | Jump / button 1                 |
+
+The machine build is selected by constants in `source/papilio_top.vhd`
+(`PACMAN='1', PENGO='0'` here; supports Pengo and all Pacman-hardware titles, incl.
+Ms. Pacman via `MRTNT`/`MSPACMAN`). 
 

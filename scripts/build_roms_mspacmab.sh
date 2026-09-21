@@ -60,7 +60,6 @@
 
 rom_path_src=../roms/mspacmab
 rom_path=../build
-# rom_path=../proj/xilinx/basys3/pengopac.srcs/sources_1/imports/build/
 romgen_path=../romgen_source
 
 [ ! -d $rom_path ] && mkdir $rom_path
